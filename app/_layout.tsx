@@ -4,8 +4,7 @@ import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/use-color-scheme";
-
-import { WishlistProvider } from "../context/WishlistContext";
+import { WishlistProvider } from "../context/WishlistContext"; // Path mengarah ke folder context kamu
 
 export const unstable_settings = {
   anchor: "(tabs)",
@@ -20,11 +19,25 @@ export default function RootLayout() {
         value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
       >
         <Stack>
+          {/* TAB UTAMA */}
           <Stack.Screen
             name="(tabs)"
             options={{ headerShown: false }}
           />
 
+          {/* DETAIL PRODUK */}
+          <Stack.Screen
+            name="product/[id]"
+            options={{ headerShown: false }}
+          />
+
+          {/* CONFIRMATION & BOOKING FORM */}
+          <Stack.Screen
+            name="booking/[id]"
+            options={{ headerShown: false }}
+          />
+
+          {/* MODAL BAWAAN */}
           <Stack.Screen
             name="modal"
             options={{

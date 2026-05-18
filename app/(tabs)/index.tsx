@@ -11,53 +11,7 @@ import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useWishlist } from "../../context/WishlistContext";
-
-const items = [
-  {
-    id: 1,
-    title: "Sony Alpha a7 III",
-    category: "Photography",
-    price: "Rp750.000/hari",
-    image:
-      "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=1200&auto=format&fit=crop",
-  },
-  {
-    id: 2,
-    title: "Makita Cordless Drill",
-    category: "Tools",
-    price: "Rp120.000/hari",
-    image:
-      "https://images.unsplash.com/photo-1504148455328-c376907d081c?q=80&w=1200&auto=format&fit=crop",
-  },
-  {
-    id: 3,
-    title: "DJI Mavic Air 2",
-    category: "Electronics",
-    price: "Rp950.000/hari",
-    image:
-      "https://images.unsplash.com/photo-1473968512647-3e447244af8f?q=80&w=1200&auto=format&fit=crop",
-  },
-  {
-    id: 4,
-    title: "Camping Tent",
-    category: "Sports",
-    price: "Rp180.000/hari",
-    image:
-      "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?q=80&w=1200&auto=format&fit=crop",
-  },
-];
-
-const categories = [
-  "All",
-  "Photography",
-  "Tools",
-  "Electronics",
-  "Books",
-  "Sports",
-  "Fashion",
-  "Vehicles",
-  "Real Estate",
-];
+import { products as items, categories } from "../../data/product";
 
 export default function HomeScreen() {
   const [selectedCategory, setSelectedCategory] =

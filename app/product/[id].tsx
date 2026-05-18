@@ -1,3 +1,4 @@
+import React from "react";
 import {
   View,
   Text,
@@ -8,52 +9,14 @@ import {
 
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, router } from "expo-router";
-
-const items = [
-  {
-    id: 1,
-    title: "Sony Alpha a7 III",
-    category: "Photography",
-    price: "Rp750.000/hari",
-    image:
-      "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=1200&auto=format&fit=crop",
-    description:
-      "Professional mirrorless camera perfect for photography and videography projects.",
-  },
-  {
-    id: 2,
-    title: "Makita Cordless Drill",
-    category: "Tools",
-    price: "Rp120.000/hari",
-    image:
-      "https://images.unsplash.com/photo-1504148455328-c376907d081c?q=80&w=1200&auto=format&fit=crop",
-    description:
-      "High-performance cordless drill suitable for home and construction work.",
-  },
-  {
-    id: 3,
-    title: "DJI Mavic Air 2",
-    category: "Electronics",
-    price: "Rp950.000/hari",
-    image:
-      "https://images.unsplash.com/photo-1473968512647-3e447244af8f?q=80&w=1200&auto=format&fit=crop",
-    description:
-      "Compact drone with stunning aerial photography and video capabilities.",
-  },
-  {
-    id: 4,
-    title: "Camping Tent",
-    category: "Sports",
-    price: "Rp180.000/hari",
-    image:
-      "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?q=80&w=1200&auto=format&fit=crop",
-    description:
-      "Comfortable camping tent suitable for outdoor adventures and hiking trips.",
-  },
-];
+import { products as items } from "../../data/product"; // Sesuaikan path mundurnya
+import { useWishlist } from "../../context/WishlistContext"; // 👈 Hubungkan ke Context global kamu
 
 export default function ProductDetail() {
   const { id } = useLocalSearchParams();
+  
+  // Mengambil data favorites dan fungsi toggle dari global context
+  const { favorites, toggleFavorite } = useWishlist();
 
   const product = items.find(
     (item) => item.id === Number(id)
@@ -72,6 +35,9 @@ export default function ProductDetail() {
       </View>
     );
   }
+
+  // Cek apakah produk ini ada di dalam daftar favorites global
+  const isLiked = favorites.some((fav) => fav.id === product.id);
 
   return (
     <View style={{ flex: 1, backgroundColor: "#F9FAFB" }}>
@@ -109,8 +75,15 @@ export default function ProductDetail() {
             />
           </TouchableOpacity>
 
-          {/* HEART BUTTON */}
+          {/* HEART BUTTON (GLOBAL STATE) */}
           <TouchableOpacity
+            onPress={() => toggleFavorite({
+              id: product.id,
+              title: product.title,
+              category: product.category,
+              price: product.price,
+              image: product.image,
+            })}
             style={{
               position: "absolute",
               top: 55,
@@ -124,9 +97,9 @@ export default function ProductDetail() {
             }}
           >
             <Ionicons
-              name="heart-outline"
+              name={isLiked ? "heart" : "heart-outline"}
               size={22}
-              color="#111827"
+              color={isLiked ? "#EF4444" : "#111827"}
             />
           </TouchableOpacity>
         </View>
@@ -205,7 +178,7 @@ export default function ProductDetail() {
                   fontWeight: "600",
                 }}
               >
-                4.9
+                {product.rating}
               </Text>
 
               <Text
@@ -214,7 +187,7 @@ export default function ProductDetail() {
                   color: "#9CA3AF",
                 }}
               >
-                (128 reviews)
+                ({product.reviewCount} reviews)
               </Text>
             </View>
 
@@ -236,7 +209,7 @@ export default function ProductDetail() {
                   color: "#6B7280",
                 }}
               >
-                Bandung
+                {product.location}
               </Text>
             </View>
           </View>
@@ -279,9 +252,7 @@ export default function ProductDetail() {
             }}
           >
             <Image
-              source={{
-                uri: "https://randomuser.me/api/portraits/men/32.jpg",
-              }}
+              source={{ uri: product.owner.avatar }}
               style={{
                 width: 56,
                 height: 56,
@@ -298,7 +269,7 @@ export default function ProductDetail() {
                   color: "#111827",
                 }}
               >
-                Rizky Pratama
+                {product.owner.name}
               </Text>
 
               <Text
@@ -307,7 +278,7 @@ export default function ProductDetail() {
                   marginTop: 4,
                 }}
               >
-                Trusted Owner
+                {product.owner.role}
               </Text>
             </View>
 
@@ -366,7 +337,7 @@ export default function ProductDetail() {
             </TouchableOpacity>
           </View>
 
-          {/* FEATURES */}
+          {/* FEATURES & SPECS */}
           <Text
             style={{
               fontSize: 18,
@@ -386,69 +357,28 @@ export default function ProductDetail() {
               marginBottom: 28,
             }}
           >
-            <View style={{ marginBottom: 14 }}>
-              <Text
-                style={{
-                  color: "#111827",
-                  fontWeight: "700",
-                  marginBottom: 4,
+            {product.specs.map((spec, index) => (
+              <View 
+                key={index} 
+                style={{ 
+                  marginBottom: index === product.specs.length - 1 ? 0 : 14 
                 }}
               >
-                Camera Type
-              </Text>
+                <Text
+                  style={{
+                    color: "#111827",
+                    fontWeight: "700",
+                    marginBottom: 4,
+                  }}
+                >
+                  {spec.label}
+                </Text>
 
-              <Text style={{ color: "#6B7280" }}>
-                Full Frame Mirrorless
-              </Text>
-            </View>
-
-            <View style={{ marginBottom: 14 }}>
-              <Text
-                style={{
-                  color: "#111827",
-                  fontWeight: "700",
-                  marginBottom: 4,
-                }}
-              >
-                Resolution
-              </Text>
-
-              <Text style={{ color: "#6B7280" }}>
-                24.2 MP
-              </Text>
-            </View>
-
-            <View style={{ marginBottom: 14 }}>
-              <Text
-                style={{
-                  color: "#111827",
-                  fontWeight: "700",
-                  marginBottom: 4,
-                }}
-              >
-                Video
-              </Text>
-
-              <Text style={{ color: "#6B7280" }}>
-                4K UHD Recording
-              </Text>
-            </View>
-
-            <View>
-              <Text
-                style={{
-                  color: "#111827",
-                  fontWeight: "700",
-                  marginBottom: 4,
-                }}
-              >
-                Included
-              </Text>
-
-              <Text style={{ color: "#6B7280" }}>
-                Extra Battery & Charger
-              </Text>
-            </View>
+                <Text style={{ color: "#6B7280" }}>
+                  {spec.value}
+                </Text>
+              </View>
+            ))}
           </View>
 
           {/* RENTAL TERMS */}
@@ -566,38 +496,39 @@ export default function ProductDetail() {
       </ScrollView>
 
       {/* BOTTOM ACTION */}
-<View
-  style={{
-    padding: 20,
-    backgroundColor: "white",
-    borderTopWidth: 1,
-    borderTopColor: "#E5E7EB",
-  }}
->
-  <TouchableOpacity
-    style={{
-      backgroundColor: "#49C5B6",
-      paddingVertical: 18,
-      borderRadius: 20,
-      justifyContent: "center",
-      alignItems: "center",
-      shadowColor: "#49C5B6",
-      shadowOpacity: 0.25,
-      shadowRadius: 10,
-      elevation: 4,
-    }}
-  >
-    <Text
-      style={{
-        color: "white",
-        fontWeight: "700",
-        fontSize: 17,
-      }}
-    >
-      Rent Now
-    </Text>
-  </TouchableOpacity>
-</View>
+      <View
+        style={{
+          padding: 20,
+          backgroundColor: "white",
+          borderTopWidth: 1,
+          borderTopColor: "#E5E7EB",
+        }}
+      >
+        <TouchableOpacity
+          onPress={() => router.push(`/booking/${product.id}`)}
+          style={{
+            backgroundColor: "#49C5B6",
+            paddingVertical: 18,
+            borderRadius: 20,
+            justifyContent: "center",
+            alignItems: "center",
+            shadowColor: "#49C5B6",
+            shadowOpacity: 0.25,
+            shadowRadius: 10,
+            elevation: 4,
+          }}
+        >
+          <Text
+            style={{
+              color: "white",
+              fontWeight: "700",
+              fontSize: 17,
+            }}
+          >
+            Rent Now
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
