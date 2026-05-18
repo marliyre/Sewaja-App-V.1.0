@@ -1,98 +1,353 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import { useState } from "react";
+import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
+import { useWishlist } from "../../context/WishlistContext";
+
+const items = [
+  {
+    id: 1,
+    title: "Sony Alpha a7 III",
+    category: "Photography",
+    price: "Rp750.000/hari",
+    image:
+      "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    id: 2,
+    title: "Makita Cordless Drill",
+    category: "Tools",
+    price: "Rp120.000/hari",
+    image:
+      "https://images.unsplash.com/photo-1504148455328-c376907d081c?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    id: 3,
+    title: "DJI Mavic Air 2",
+    category: "Electronics",
+    price: "Rp950.000/hari",
+    image:
+      "https://images.unsplash.com/photo-1473968512647-3e447244af8f?q=80&w=1200&auto=format&fit=crop",
+  },
+  {
+    id: 4,
+    title: "Camping Tent",
+    category: "Sports",
+    price: "Rp180.000/hari",
+    image:
+      "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?q=80&w=1200&auto=format&fit=crop",
+  },
+];
+
+const categories = [
+  "All",
+  "Photography",
+  "Tools",
+  "Electronics",
+  "Books",
+  "Sports",
+  "Fashion",
+  "Vehicles",
+  "Real Estate",
+];
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+  const [selectedCategory, setSelectedCategory] =
+    useState("All");
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+  const { favorites, toggleFavorite } = useWishlist();
+
+  const filteredItems =
+    selectedCategory === "All"
+      ? items
+      : items.filter(
+          (item) => item.category === selectedCategory
+        );
+
+  return (
+    <View style={{ flex: 1, backgroundColor: "#F9FAFB" }}>
+      
+      {/* HEADER */}
+      <View
+        style={{
+          paddingTop: 60,
+          paddingHorizontal: 20,
+          paddingBottom: 20,
+          backgroundColor: "white",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          borderBottomWidth: 1,
+          borderBottomColor: "#E5E7EB",
+        }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <View
+            style={{
+              width: 38,
+              height: 38,
+              borderRadius: 12,
+              backgroundColor: "#49C5B6",
+              justifyContent: "center",
+              alignItems: "center",
+              marginRight: 10,
+            }}
+          >
+            <Ionicons
+              name="cube-outline"
+              size={20}
+              color="white"
+            />
+          </View>
+
+          <Text
+            style={{
+              fontSize: 28,
+              fontWeight: "800",
+              color: "#2D8B81",
+            }}
+          >
+            Sewaja
+          </Text>
+        </View>
+
+        {/* NOTIFICATION */}
+        <TouchableOpacity
+          style={{
+            width: 42,
+            height: 42,
+            borderRadius: 21,
+            backgroundColor: "#EEFDFB",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Ionicons
+            name="notifications-outline"
+            size={22}
+            color="#2D8B81"
+          />
+        </TouchableOpacity>
+      </View>
+
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingHorizontal: 20,
+          paddingBottom: 120,
+        }}
+      >
+        
+        {/* SEARCH */}
+        <View
+          style={{
+            marginTop: 20,
+            marginBottom: 20,
+            backgroundColor: "white",
+            borderRadius: 18,
+            paddingHorizontal: 16,
+            height: 56,
+            flexDirection: "row",
+            alignItems: "center",
+            shadowColor: "#000",
+            shadowOpacity: 0.04,
+            shadowRadius: 10,
+            elevation: 2,
+          }}
+        >
+          <Ionicons
+            name="search-outline"
+            size={22}
+            color="#6B7280"
+          />
+
+          <TextInput
+            placeholder="Search cameras, tools, etc..."
+            placeholderTextColor="#9CA3AF"
+            style={{
+              flex: 1,
+              marginLeft: 10,
+              fontSize: 15,
+            }}
+          />
+
+          <Ionicons
+            name="options-outline"
+            size={22}
+            color="#2D8B81"
+          />
+        </View>
+
+        {/* CATEGORY */}
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={{ marginBottom: 24 }}
+        >
+          {categories.map((category, index) => {
+            const isActive =
+              selectedCategory === category;
+
+            return (
+              <TouchableOpacity
+                key={index}
+                onPress={() =>
+                  setSelectedCategory(category)
+                }
+                style={{
+                  paddingHorizontal: 18,
+                  paddingVertical: 10,
+                  borderRadius: 999,
+                  backgroundColor: isActive
+                    ? "#49C5B6"
+                    : "white",
+                  marginRight: 10,
+                }}
+              >
+                <Text
+                  style={{
+                    color: isActive
+                      ? "white"
+                      : "#374151",
+                    fontWeight: "600",
+                  }}
+                >
+                  {category}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
+
+        {/* CARD GRID */}
+        <View
+          style={{
+            flexDirection: "row",
+            flexWrap: "wrap",
+            justifyContent: "space-between",
+          }}
+        >
+          {filteredItems.map((item) => (
+            <TouchableOpacity
+              key={item.id}
+              onPress={() =>
+                router.push({
+                  pathname: "/product/[id]",
+                  params: {
+                    id: item.id.toString(),
+                  },
+                })
+              }
+              activeOpacity={0.9}
+              style={{
+                width: "48%",
+                backgroundColor: "white",
+                borderRadius: 24,
+                marginBottom: 18,
+                overflow: "hidden",
+                shadowColor: "#000",
+                shadowOpacity: 0.05,
+                shadowRadius: 10,
+                elevation: 3,
+              }}
+            >
+              <View>
+                <Image
+                  source={{ uri: item.image }}
+                  style={{
+                    width: "100%",
+                    height: 160,
+                  }}
+                />
+
+                <TouchableOpacity
+                  onPress={() =>
+                    toggleFavorite(item)
+                  }
+                  style={{
+                    position: "absolute",
+                    top: 10,
+                    right: 10,
+                    width: 34,
+                    height: 34,
+                    borderRadius: 17,
+                    backgroundColor:
+                      "rgba(255,255,255,0.9)",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Ionicons
+                    name={
+                      favorites.some(
+                        (fav) => fav.id === item.id
+                      )
+                        ? "heart"
+                        : "heart-outline"
+                    }
+                    size={18}
+                    color={
+                      favorites.some(
+                        (fav) => fav.id === item.id
+                      )
+                        ? "#EF4444"
+                        : "#374151"
+                    }
+                  />
+                </TouchableOpacity>
+              </View>
+
+              <View style={{ padding: 14 }}>
+                <Text
+                  style={{
+                    fontSize: 11,
+                    fontWeight: "700",
+                    color: "#49C5B6",
+                    marginBottom: 6,
+                  }}
+                >
+                  {item.category}
+                </Text>
+
+                <Text
+                  numberOfLines={2}
+                  style={{
+                    fontSize: 15,
+                    fontWeight: "700",
+                    color: "#111827",
+                    marginBottom: 10,
+                  }}
+                >
+                  {item.title}
+                </Text>
+
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontWeight: "800",
+                    color: "#2D8B81",
+                  }}
+                >
+                  {item.price}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </ScrollView>
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
