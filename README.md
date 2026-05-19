@@ -8,6 +8,10 @@ Prototype ini berfokus pada validasi konsep, desain UI/UX, alur penggunaan, dan 
 
 Ini adalah sebuah Proyek [Expo](https://expo.dev) yang dibuat dengan [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
+## Purpose
+
+Sewaja dibuat untuk mendukung budaya berbagi barang, mengurangi konsumsi berlebih, dan membantu pengguna mendapatkan akses kebutuhan dengan lebih hemat.
+
 ## Get started
 
 1. Install Node.js + npm
@@ -131,7 +135,3 @@ Fokus pengembangan berikutnya adalah:
 - Rating and review
 - Admin dashboard
 - Mobile frontend implementation
-
-## Purpose
-
-Sewaja dibuat untuk mendukung budaya berbagi barang, mengurangi konsumsi berlebih, dan membantu pengguna mendapatkan akses kebutuhan dengan lebih hemat.
