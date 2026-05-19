@@ -1,50 +1,147 @@
-# Welcome to your Expo app 👋
+# Sewaja App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## Sewa Barang Jadi Lebih Mudah
+
+Sewaja App adalah prototype aplikasi sewa barang berbasis mobile yang dirancang untuk membantu pengguna mencari, menyewa, dan menawarkan barang secara praktis.
+
+Prototype ini berfokus pada validasi konsep, desain UI/UX, alur penggunaan, dan materi presentasi sebelum masuk ke tahap frontend dan backend production.
+
+Ini adalah sebuah Proyek [Expo](https://expo.dev) yang dibuat dengan [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
 ## Get started
 
-1. Install dependencies
+1. Install Node.js + npm
+   Kalau belum ada:
+   Node.js + npm
+   [👉 Download:](https://nodejs.org)
+   (ini sudah termasuk npm)
+   Git
+   [👉](https://git-scm.com)
+
+   Cek sudah terpasang:
+   ```bash
+   node -v
+   npm -v
+   git --version
+   ```
+
+2. Clone project from Github
+   ```bash
+   git clone https://github.com/marliyre/Sewaja-App-V.1.0.git
+   ```
+   Masuk foldernya:
+   ```bash
+   cd Sewaja-App-V.1.0
+   ```
+   
+3. Install dependencies
 
    ```bash
    npm install
    ```
 
-2. Start the app
+4. Start the app
 
    ```bash
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+Pada tampilan hasil, Anda akan menemukan opsi untuk membuka aplikasi dalam sebuah
 
 - [development build](https://docs.expo.dev/develop/development-builds/introduction/)
 - [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
 - [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- [Expo Go](https://expo.dev/go), lingkungan uji coba terbatas untuk mencoba pengembangan aplikasi dengan Expo
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+Anda dapat mulai mengembangkan aplikasi dengan mengedit berkas-berkas di dalam direktori **app**. Proyek ini menggunakan [file-based routing](https://docs.expo.dev/router/introduction).
 
 ## Get a fresh project
 
-When you're ready, run:
+Jika Anda sudah siap, jalankan:
 
 ```bash
 npm run reset-project
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Perintah ini akan memindahkan kode awal ke direktori **app-example** dan membuat direktori **app** kosong tempat Anda dapat mulai mengembangkan aplikasi.
 
-## Learn more
+## Project Goal
 
-To learn more about developing your project with Expo, look at the following resources:
+- Menampilkan konsep aplikasi sewa barang yang mudah dipahami.
+- Menunjukkan alur pengguna dari login sampai booking.
+- Membuat desain UI/UX modern, clean, dan mobile-first.
+- Menyiapkan dokumentasi untuk GitHub, presentasi, dan validasi ide.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Main Features
 
-## Join the community
+- Login dan register
+- Pencarian barang
+- Kategori barang
+- Detail informasi barang
+- Booking/sewa barang
+- Chat antar pengguna
+- Profil pengguna
+- Wishlist dan riwayat sewa
+- Upload barang
 
-Join our community of developers creating universal apps.
+## Prototype Pages
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- Splash Screen
+- Login & Register
+- Home Page
+- Kategori Page
+- Detail Barang Page
+- Booking Page
+- Konfirmasi Booking Page
+- Chat Page
+- Profil Page
+- Upload Barang Page
+
+## Main User Flow
+
+1. User membuka aplikasi.
+2. User login atau register.
+3. User mencari barang dari Home.
+4. User memilih kategori.
+5. User melihat detail barang.
+6. User memilih tanggal dan durasi sewa.
+7. User melakukan booking.
+8. User membuka chat dengan pemilik barang.
+9. User melihat riwayat pada profil.
+
+## Design Direction
+
+- Primary Mint: `#10B981`
+- Dark Mint: `#047857`
+- Light Mint: `#ECFDF5`
+- White: `#FFFFFF`
+- Soft Mint Background: `#F0FDF4`
+- Font: Inter atau Poppins
+- Style: modern, eco-friendly, fresh, hemat, sociopreneur, rounded card, soft shadow, clean layout
+
+## Project Status
+
+Proyek saat ini sudah menggunakan frontend berbasis React + TypeScript (.tsx).
+
+Aplikasi dapat dijalankan melalui development server menggunakan tooling seperti Expo.
+
+Fokus pengembangan berikutnya adalah:
+- Validasi user flow
+- Penyempurnaan UI/UX
+- Refactoring struktur komponen
+- Persiapan integrasi API atau backend jika dibutuhkan
+
+## Future Development
+
+- Authentication system
+- Real-time notification
+- Payment gateway
+- Search and filter
+- Database integration
+- Rating and review
+- Admin dashboard
+- Mobile frontend implementation
+
+## Purpose
+
+Sewaja dibuat untuk mendukung budaya berbagi barang, mengurangi konsumsi berlebih, dan membantu pengguna mendapatkan akses kebutuhan dengan lebih hemat.
