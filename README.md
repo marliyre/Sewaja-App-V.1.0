@@ -109,16 +109,6 @@ Perintah ini akan memindahkan kode awal ke direktori **app-example** dan membuat
 8. User membuka chat dengan pemilik barang.
 9. User melihat riwayat pada profil.
 
-## Design Direction
-
-- Primary Mint: `#10B981`
-- Dark Mint: `#047857`
-- Light Mint: `#ECFDF5`
-- White: `#FFFFFF`
-- Soft Mint Background: `#F0FDF4`
-- Font: Inter atau Poppins
-- Style: modern, eco-friendly, fresh, hemat, sociopreneur, rounded card, soft shadow, clean layout
-
 ## Project Status
 
 Proyek saat ini sudah menggunakan frontend berbasis React + TypeScript (.tsx).
