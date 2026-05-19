@@ -13,10 +13,10 @@ Ini adalah sebuah Proyek [Expo](https://expo.dev) yang dibuat dengan [`create-ex
 1. Install Node.js + npm
    - Kalau belum ada:
    - Node.js + npm
-   [👉 Download:](https://nodejs.org)
+   [👉 Download](https://nodejs.org)
    (ini sudah termasuk npm)
    - Git
-   [👉 Download:](https://git-scm.com)
+   [👉 Download](https://git-scm.com)
 
    Cek sudah terpasang:
    ```bash
