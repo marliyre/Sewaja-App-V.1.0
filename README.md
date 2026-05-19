@@ -104,7 +104,7 @@ Perintah ini akan memindahkan kode awal ke direktori **app-example** dan membuat
 3. User mencari barang dari Home.
 4. User memilih kategori.
 5. User melihat detail barang.
-6. User memilih tanggal dan durasi sewa.
+6. User memilih durasi sewa.
 7. User melakukan booking.
 8. User membuka chat dengan pemilik barang.
 9. User melihat riwayat pada profil.
