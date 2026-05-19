@@ -9,17 +9,22 @@ import {
 
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, router } from "expo-router";
-import { products as items } from "../../data/product"; // Sesuaikan path mundurnya
-import { useWishlist } from "../../context/WishlistContext"; // 👈 Hubungkan ke Context global kamu
+// 1. Hubungkan ke ProductContext dinamis kamu
+import { useProducts } from "../../context/ProductContext"; 
+import { useWishlist } from "../../context/WishlistContext";
 
 export default function ProductDetail() {
   const { id } = useLocalSearchParams();
   
+  // Mengambil data products dinamis dari global context
+  const { products } = useProducts();
   // Mengambil data favorites dan fungsi toggle dari global context
   const { favorites, toggleFavorite } = useWishlist();
 
-  const product = items.find(
-    (item) => item.id === Number(id)
+  // FIX SINKRONISASI ID: Ambil id pertama jika berbentuk array, lalu samakan tipe datanya menjadi String
+  const stringId = Array.isArray(id) ? id[0] : id;
+  const product = products.find(
+    (item) => String(item.id) === String(stringId)
   );
 
   if (!product) {
@@ -29,15 +34,22 @@ export default function ProductDetail() {
           flex: 1,
           justifyContent: "center",
           alignItems: "center",
+          backgroundColor: "#F9FAFB",
         }}
       >
-        <Text>Product not found</Text>
+        <Text style={{ fontSize: 16, color: "#6B7280", fontWeight: "600" }}>Product not found</Text>
+        <TouchableOpacity 
+          onPress={() => router.back()} 
+          style={{ marginTop: 14, backgroundColor: "#49C5B6", paddingHorizontal: 16, paddingVertical: 8, borderRadius: 10 }}
+        >
+          <Text style={{ color: "white", fontWeight: "700" }}>Go Back</Text>
+        </TouchableOpacity>
       </View>
     );
   }
 
-  // Cek apakah produk ini ada di dalam daftar favorites global
-  const isLiked = favorites.some((fav) => fav.id === product.id);
+  // FIX WISHLIST MATCHING: Samakan pembandingan ID favorit menggunakan string murni
+  const isLiked = favorites.some((fav) => String(fav.id) === String(product.id));
 
   return (
     <View style={{ flex: 1, backgroundColor: "#F9FAFB" }}>
@@ -78,12 +90,9 @@ export default function ProductDetail() {
           {/* HEART BUTTON (GLOBAL STATE) */}
           <TouchableOpacity
             onPress={() => toggleFavorite({
-              id: product.id,
-              title: product.title,
-              category: product.category,
-              price: product.price,
-              image: product.image,
-            })}
+              ...product,
+              id: isNaN(Number(product.id)) ? product.id : Number(product.id) // Aman untuk tipe data string maupun number ke Wishlist
+            } as any)}
             style={{
               position: "absolute",
               top: 55,
@@ -178,7 +187,7 @@ export default function ProductDetail() {
                   fontWeight: "600",
                 }}
               >
-                {product.rating}
+                {product.rating || "0.0"}
               </Text>
 
               <Text
@@ -187,7 +196,7 @@ export default function ProductDetail() {
                   color: "#9CA3AF",
                 }}
               >
-                ({product.reviewCount} reviews)
+                ({product.reviewCount || 0} reviews)
               </Text>
             </View>
 
@@ -209,7 +218,7 @@ export default function ProductDetail() {
                   color: "#6B7280",
                 }}
               >
-                {product.location}
+                {product.location || "No Location Specified"}
               </Text>
             </View>
           </View>
@@ -233,7 +242,7 @@ export default function ProductDetail() {
               marginBottom: 30,
             }}
           >
-            {product.description}
+            {product.description || "No description provided for this product."}
           </Text>
 
           {/* OWNER CARD */}
@@ -252,7 +261,11 @@ export default function ProductDetail() {
             }}
           >
             <Image
-              source={{ uri: product.owner.avatar }}
+              source={{ 
+                uri: typeof product.owner === 'object' && product.owner?.avatar 
+                  ? product.owner.avatar 
+                  : "https://via.placeholder.com/150" 
+              }}
               style={{
                 width: 56,
                 height: 56,
@@ -269,7 +282,7 @@ export default function ProductDetail() {
                   color: "#111827",
                 }}
               >
-                {product.owner.name}
+                {typeof product.owner === 'object' ? product.owner?.name : (product.owner || "Owner Sewaja")}
               </Text>
 
               <Text
@@ -278,7 +291,7 @@ export default function ProductDetail() {
                   marginTop: 4,
                 }}
               >
-                {product.owner.role}
+                {typeof product.owner === 'object' ? product.owner?.role : "Product Owner"}
               </Text>
             </View>
 
@@ -296,8 +309,15 @@ export default function ProductDetail() {
               marginBottom: 30,
             }}
           >
+            {/* FIX CHAT ROUTING: Menggunakan typeof check agar fleksibel menerima tipe object maupun string dari form upload */}
             <TouchableOpacity
-              onPress={() => router.push("/(tabs)/chat")}
+              onPress={() => router.push({
+                pathname: "/(tabs)/chat",
+                params: {
+                  ownerName: typeof product.owner === 'object' ? product.owner?.name : (product.owner || "Owner Sewaja"),
+                  productTitle: product.title
+                }
+              })}
               style={{
                 flex: 1,
                 backgroundColor: "#111827",
@@ -357,28 +377,32 @@ export default function ProductDetail() {
               marginBottom: 28,
             }}
           >
-            {product.specs.map((spec, index) => (
-              <View 
-                key={index} 
-                style={{ 
-                  marginBottom: index === product.specs.length - 1 ? 0 : 14 
-                }}
-              >
-                <Text
-                  style={{
-                    color: "#111827",
-                    fontWeight: "700",
-                    marginBottom: 4,
+            {product.specs && product.specs.length > 0 ? (
+              product.specs.map((spec, index) => (
+                <View 
+                  key={index} 
+                  style={{ 
+                    marginBottom: index === product.specs.length - 1 ? 0 : 14 
                   }}
                 >
-                  {spec.label}
-                </Text>
+                  <Text
+                    style={{
+                      color: "#111827",
+                      fontWeight: "700",
+                      marginBottom: 4,
+                    }}
+                  >
+                    {spec.label}
+                  </Text>
 
-                <Text style={{ color: "#6B7280" }}>
-                  {spec.value}
-                </Text>
-              </View>
-            ))}
+                  <Text style={{ color: "#6B7280" }}>
+                    {spec.value}
+                  </Text>
+                </View>
+              ))
+            ) : (
+              <Text style={{ color: "#6B7280" }}>Standard specifications applied to this item.</Text>
+            )}
           </View>
 
           {/* RENTAL TERMS */}
@@ -401,93 +425,30 @@ export default function ProductDetail() {
               marginBottom: 40,
             }}
           >
-            <View
-              style={{
-                flexDirection: "row",
-                marginBottom: 16,
-              }}
-            >
-              <Ionicons
-                name="time-outline"
-                size={18}
-                color="#49C5B6"
-              />
-
-              <Text
-                style={{
-                  marginLeft: 10,
-                  color: "#6B7280",
-                  flex: 1,
-                }}
-              >
+            <View style={{ flexDirection: "row", marginBottom: 16 }}>
+              <Ionicons name="time-outline" size={18} color="#49C5B6" />
+              <Text style={{ marginLeft: 10, color: "#6B7280", flex: 1 }}>
                 Minimum rental duration is 1 day
               </Text>
             </View>
 
-            <View
-              style={{
-                flexDirection: "row",
-                marginBottom: 16,
-              }}
-            >
-              <Ionicons
-                name="card-outline"
-                size={18}
-                color="#49C5B6"
-              />
-
-              <Text
-                style={{
-                  marginLeft: 10,
-                  color: "#6B7280",
-                  flex: 1,
-                }}
-              >
+            <View style={{ flexDirection: "row", marginBottom: 16 }}>
+              <Ionicons name="card-outline" size={18} color="#49C5B6" />
+              <Text style={{ marginLeft: 10, color: "#6B7280", flex: 1 }}>
                 Must provide identity card before renting
               </Text>
             </View>
 
-            <View
-              style={{
-                flexDirection: "row",
-                marginBottom: 16,
-              }}
-            >
-              <Ionicons
-                name="alert-circle-outline"
-                size={18}
-                color="#49C5B6"
-              />
-
-              <Text
-                style={{
-                  marginLeft: 10,
-                  color: "#6B7280",
-                  flex: 1,
-                }}
-              >
+            <View style={{ flexDirection: "row", marginBottom: 16 }}>
+              <Ionicons name="alert-circle-outline" size={18} color="#49C5B6" />
+              <Text style={{ marginLeft: 10, color: "#6B7280", flex: 1 }}>
                 Late return will incur additional charges
               </Text>
             </View>
 
-            <View
-              style={{
-                flexDirection: "row",
-              }}
-            >
-              <Ionicons
-                name="shield-checkmark-outline"
-                size={18}
-                color="#49C5B6"
-              />
-
-              <Text
-                style={{
-                  marginLeft: 10,
-                  color: "#6B7280",
-                  flex: 1,
-                }}
-              >
+            <View style={{ flexDirection: "row" }}>
+              <Ionicons name="shield-checkmark-outline" size={18} color="#49C5B6" />
+              <Text style={{ marginLeft: 10, color: "#6B7280", flex: 1 }}>
                 Damaged items must be compensated
               </Text>
             </View>

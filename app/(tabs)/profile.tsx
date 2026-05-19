@@ -1,459 +1,215 @@
-import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
-
+import React, { useState } from "react";
+import { View, Text, ScrollView, Image, TouchableOpacity, Modal, TextInput, KeyboardAvoidingView, Platform } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router"; // Impor router expo
 
 export default function ProfileScreen() {
+  const router = useRouter(); // Definisikan hook router
+  
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  // State data profil
+  const [name, setName] = useState("Dina Amelia");
+  const [email, setEmail] = useState("dinaamelia@gmail.com");
+  const [phone, setPhone] = useState("081234567890");
+  const [password, setPassword] = useState("********");
+
+  const theme = {
+    bg: "#F9FAFB",         
+    card: "white",         
+    text: "#111827",       
+    subText: "#6B7280",    
+    border: "#E5E7EB",     
+    brandPrimary: "#49C5B6", 
+    brandDark: "#2D8B81",    
+    badgeBg: "#EEFDFB",    
+    inputBg: "#F3F4F6"
+  };
+
+  const handleSaveSettings = () => {
+    console.log("Data berhasil disimpan");
+    setIsModalVisible(false);
+  };
+
+  // FUNGSI HANDLER UNTUK KELUAR APLIKASI
+  const handleLogout = () => {
+    setIsModalVisible(false); // Tutup modal dulu
+    console.log("User telah logout.");
+    router.replace("/login"); // Tendang balik secara realtime ke halaman login
+  };
+
   return (
-    <View style={{ flex: 1, backgroundColor: "#0F172A" }}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          paddingBottom: 120,
-        }}
-      >
-        {/* HEADER */}
-        <View
+    <View style={{ flex: 1, backgroundColor: theme.bg, paddingTop: 60 }}>
+      
+      {/* HEADER BAR PROFILE */}
+      <View style={{ 
+        paddingHorizontal: 24, 
+        paddingBottom: 15, 
+        flexDirection: "row", 
+        justifyContent: "space-between", 
+        alignItems: "center"
+      }}>
+        <Text style={{ fontSize: 28, fontWeight: "800", color: theme.brandDark }}>Profile</Text>
+        
+        {/* ICON SETTINGS */}
+        <TouchableOpacity 
+          activeOpacity={0.7}
+          onPress={() => setIsModalVisible(true)}
           style={{
-            paddingTop: 70,
-            paddingHorizontal: 24,
-            paddingBottom: 32,
-            backgroundColor: "#111827",
-            borderBottomLeftRadius: 36,
-            borderBottomRightRadius: 36,
+            width: 44,
+            height: 44,
+            borderRadius: 14,
+            backgroundColor: "white",
+            justifyContent: "center",
+            alignItems: "center",
+            shadowColor: "#000",
+            shadowOpacity: 0.03,
+            shadowRadius: 8,
+            elevation: 2,
           }}
         >
-          {/* TOP BAR */}
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: 30,
-            }}
-          >
-            <Text
-              style={{
-                color: "white",
-                fontSize: 28,
-                fontWeight: "800",
-              }}
-            >
-              Profile
-            </Text>
+          <Ionicons name="settings-outline" size={22} color={theme.text} />
+        </TouchableOpacity>
+      </View>
 
-            {/* SETTINGS BUTTON */}
-            <TouchableOpacity
-              style={{
-                width: 46,
-                height: 46,
-                borderRadius: 23,
-                backgroundColor: "#1F2937",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Ionicons
-                name="settings-outline"
-                size={22}
-                color="white"
-              />
-            </TouchableOpacity>
-          </View>
-
-          {/* PROFILE CARD */}
-          <View
-            style={{
-              backgroundColor: "#1E293B",
-              borderRadius: 28,
-              padding: 22,
-            }}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <Image
-                source={{
-                  uri: "https://randomuser.me/api/portraits/women/44.jpg",
-                }}
-                style={{
-                  width: 82,
-                  height: 82,
-                  borderRadius: 41,
-                  marginRight: 18,
-                }}
-              />
-
-              <View style={{ flex: 1 }}>
-                <Text
-                  style={{
-                    color: "white",
-                    fontSize: 22,
-                    fontWeight: "800",
-                    marginBottom: 4,
-                  }}
-                >
-                  Siti Marliyah
-                </Text>
-
-                <Text
-                  style={{
-                    color: "#94A3B8",
-                    marginBottom: 12,
-                  }}
-                >
-                  Premium Member
-                </Text>
-
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: "#49C5B6",
-                    paddingHorizontal: 16,
-                    paddingVertical: 10,
-                    borderRadius: 14,
-                    alignSelf: "flex-start",
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: "white",
-                      fontWeight: "700",
-                    }}
-                  >
-                    Edit Profile
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 24, paddingTop: 10 }}>
+        
+        {/* USER INFO CARD */}
+        <View style={{ 
+          alignItems: "center", 
+          backgroundColor: theme.card, 
+          borderRadius: 28, 
+          padding: 24, 
+          marginBottom: 24,
+          shadowColor: "#000",
+          shadowOpacity: 0.03,
+          shadowRadius: 10,
+          elevation: 2
+        }}>
+          <Image 
+            source={{ uri: "https://images.unsplash.com/photo-1534528741775-53994a69daeb" }} 
+            style={{ width: 90, height: 90, borderRadius: 45, marginBottom: 14 }} 
+          />
+          
+          <Text style={{ fontSize: 22, fontWeight: "800", color: theme.text }}>{name}</Text>
+          
+          <View style={{ 
+            flexDirection: "row", 
+            alignItems: "center", 
+            backgroundColor: theme.badgeBg, 
+            paddingHorizontal: 14, 
+            paddingVertical: 6, 
+            borderRadius: 12, 
+            marginTop: 8 
+          }}>
+            <Ionicons name="checkmark-circle" size={16} color={theme.brandPrimary} style={{ marginRight: 6 }} />
+            <Text style={{ color: theme.brandDark, fontWeight: "700", fontSize: 13 }}>Trusted Owner</Text>
           </View>
         </View>
 
-        {/* STATS */}
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            paddingHorizontal: 20,
-            marginTop: 24,
-          }}
-        >
-          {[
-            {
-              title: "Listings",
-              value: "12",
-              icon: "cube-outline",
-            },
-            {
-              title: "Rented",
-              value: "89",
-              icon: "repeat-outline",
-            },
-            {
-              title: "Rating",
-              value: "4.9",
-              icon: "star",
-            },
-          ].map((item, index) => (
-            <View
-              key={index}
-              style={{
-                width: "31%",
-                backgroundColor: "#111827",
-                borderRadius: 24,
-                paddingVertical: 20,
-                alignItems: "center",
-              }}
-            >
-              <View
-                style={{
-                  width: 42,
-                  height: 42,
-                  borderRadius: 21,
-                  backgroundColor: "#1E293B",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginBottom: 12,
-                }}
-              >
-                <Ionicons
-                  name={item.icon as any}
-                  size={20}
-                  color="#49C5B6"
-                />
-              </View>
+        {/* MENU UTAMA PROFILE */}
+        <Text style={{ fontSize: 18, fontWeight: "700", color: theme.text, marginBottom: 14, marginLeft: 4 }}>
+          Dashboard
+        </Text>
 
-              <Text
-                style={{
-                  color: "white",
-                  fontSize: 20,
-                  fontWeight: "800",
-                }}
-              >
-                {item.value}
-              </Text>
-
-              <Text
-                style={{
-                  color: "#94A3B8",
-                  marginTop: 4,
-                  fontSize: 12,
-                }}
-              >
-                {item.title}
-              </Text>
-            </View>
-          ))}
-        </View>
-
-        {/* MY LISTINGS */}
-        <View
-          style={{
-            paddingHorizontal: 20,
-            marginTop: 32,
-          }}
-        >
-          <Text
-            style={{
-              color: "white",
-              fontSize: 20,
-              fontWeight: "800",
-              marginBottom: 18,
+        <View style={{ 
+          backgroundColor: theme.card, 
+          borderRadius: 24, 
+          paddingVertical: 8,
+          shadowColor: "#000",
+          shadowOpacity: 0.03,
+          shadowRadius: 10,
+          elevation: 2,
+          marginBottom: 40
+        }}>
+          
+          {/* MY PRODUCTS */}
+          <TouchableOpacity 
+            activeOpacity={0.6}
+            // 💡 FIX: Diarahkan push ke halaman my-products
+            onPress={() => router.push("/profile/my-products")}
+            style={{ 
+              flexDirection: "row", 
+              alignItems: "center", 
+              paddingHorizontal: 20, 
+              paddingVertical: 16,
+              borderBottomWidth: 1,
+              borderBottomColor: theme.border
             }}
           >
-            My Listings
-          </Text>
-
-          {[1, 2].map((item) => (
-            <View
-              key={item}
-              style={{
-                backgroundColor: "#111827",
-                borderRadius: 24,
-                padding: 16,
-                marginBottom: 16,
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <Image
-                source={{
-                  uri:
-                    item === 1
-                      ? "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=1200&auto=format&fit=crop"
-                      : "https://images.unsplash.com/photo-1473968512647-3e447244af8f?q=80&w=1200&auto=format&fit=crop",
-                }}
-                style={{
-                  width: 82,
-                  height: 82,
-                  borderRadius: 18,
-                  marginRight: 14,
-                }}
-              />
-
-              <View style={{ flex: 1 }}>
-                <Text
-                  style={{
-                    color: "white",
-                    fontSize: 16,
-                    fontWeight: "700",
-                    marginBottom: 6,
-                  }}
-                >
-                  {item === 1
-                    ? "Sony Alpha a7 III"
-                    : "DJI Mavic Air 2"}
-                </Text>
-
-                <Text
-                  style={{
-                    color: "#49C5B6",
-                    fontWeight: "700",
-                    marginBottom: 10,
-                  }}
-                >
-                  {item === 1
-                    ? "Rp750.000/hari"
-                    : "Rp950.000/hari"}
-                </Text>
-
-                <View
-                  style={{
-                    backgroundColor: "#1E293B",
-                    paddingHorizontal: 12,
-                    paddingVertical: 6,
-                    borderRadius: 999,
-                    alignSelf: "flex-start",
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: "#94A3B8",
-                      fontSize: 12,
-                    }}
-                  >
-                    Active Listing
-                  </Text>
-                </View>
-              </View>
+            <View style={{ width: 40, height: 40, borderRadius: 12, backgroundColor: theme.badgeBg, justifyContent: "center", alignItems: "center", marginRight: 16 }}>
+              <Ionicons name="cube-outline" size={20} color={theme.brandDark} />
             </View>
-          ))}
-        </View>
+            <View style={{ flex: 1 }}>
+              <Text style={{ fontWeight: "700", fontSize: 16, color: theme.text }}>My Products</Text>
+              <Text style={{ fontSize: 12, color: theme.subText, marginTop: 2 }}>Kelola barang yang kamu sewakan</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={18} color="#9CA3AF" />
+          </TouchableOpacity>
 
-        {/* RENTAL HISTORY */}
-        <View
-          style={{
-            paddingHorizontal: 20,
-            marginTop: 16,
-          }}
-        >
-          <Text
-            style={{
-              color: "white",
-              fontSize: 20,
-              fontWeight: "800",
-              marginBottom: 18,
-            }}
+          {/* HISTORY RENTS */}
+          <TouchableOpacity 
+            activeOpacity={0.6}
+            // 💡 FIX: Diarahkan push ke halaman history-rents 
+            onPress={() => router.push("/profile/history-rents")}
+            style={{ flexDirection: "row", alignItems: "center", paddingHorizontal: 20, paddingVertical: 16 }}
           >
-            Rental History
-          </Text>
-
-          <View
-            style={{
-              backgroundColor: "#111827",
-              borderRadius: 24,
-              padding: 20,
-            }}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                marginBottom: 16,
-              }}
-            >
-              <View
-                style={{
-                  width: 52,
-                  height: 52,
-                  borderRadius: 16,
-                  backgroundColor: "#1E293B",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginRight: 14,
-                }}
-              >
-                <Ionicons
-                  name="time-outline"
-                  size={24}
-                  color="#49C5B6"
-                />
-              </View>
-
-              <View style={{ flex: 1 }}>
-                <Text
-                  style={{
-                    color: "white",
-                    fontWeight: "700",
-                    fontSize: 16,
-                    marginBottom: 4,
-                  }}
-                >
-                  Canon EOS R6
-                </Text>
-
-                <Text
-                  style={{
-                    color: "#94A3B8",
-                  }}
-                >
-                  Rented on 12 May 2026
-                </Text>
-              </View>
-
-              <Text
-                style={{
-                  color: "#49C5B6",
-                  fontWeight: "700",
-                }}
-              >
-                Finished
-              </Text>
+            <View style={{ width: 40, height: 40, borderRadius: 12, backgroundColor: "#FFF7ED", justifyContent: "center", alignItems: "center", marginRight: 16 }}>
+              <Ionicons name="time-outline" size={20} color="#EA580C" />
             </View>
-
-            <View
-              style={{
-                height: 1,
-                backgroundColor: "#1E293B",
-                marginVertical: 4,
-              }}
-            />
-
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                marginTop: 16,
-              }}
-            >
-              <View
-                style={{
-                  width: 52,
-                  height: 52,
-                  borderRadius: 16,
-                  backgroundColor: "#1E293B",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginRight: 14,
-                }}
-              >
-                <Ionicons
-                  name="camera-outline"
-                  size={24}
-                  color="#49C5B6"
-                />
-              </View>
-
-              <View style={{ flex: 1 }}>
-                <Text
-                  style={{
-                    color: "white",
-                    fontWeight: "700",
-                    fontSize: 16,
-                    marginBottom: 4,
-                  }}
-                >
-                  DJI Mavic Air 2
-                </Text>
-
-                <Text
-                  style={{
-                    color: "#94A3B8",
-                  }}
-                >
-                  Ongoing Rental
-                </Text>
-              </View>
-
-              <Text
-                style={{
-                  color: "#F59E0B",
-                  fontWeight: "700",
-                }}
-              >
-                Active
-              </Text>
+            <View style={{ flex: 1 }}>
+              <Text style={{ fontWeight: "700", fontSize: 16, color: theme.text }}>History Rents</Text>
+              <Text style={{ fontSize: 12, color: theme.subText, marginTop: 2 }}>Riwayat transaksi sewa menyewa kamu</Text>
             </View>
-          </View>
+            <Ionicons name="chevron-forward" size={18} color="#9CA3AF" />
+          </TouchableOpacity>
         </View>
       </ScrollView>
+
+      {/* MODAL SETTINGS */}
+      <Modal animationType="slide" transparent={true} visible={isModalVisible} onRequestClose={() => setIsModalVisible(false)}>
+        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1, justifyContent: "flex-end", backgroundColor: "rgba(0,0,0,0.4)" }}>
+          <View style={{ backgroundColor: "white", borderTopLeftRadius: 32, borderTopRightRadius: 32, padding: 24, maxHeight: "85%" }}>
+            
+            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+              <Text style={{ fontSize: 20, fontWeight: "800", color: theme.text }}>Account Settings</Text>
+              <TouchableOpacity onPress={() => setIsModalVisible(false)} style={{ padding: 4 }}>
+                <Ionicons name="close" size={24} color={theme.text} />
+              </TouchableOpacity>
+            </View>
+
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <Text style={{ fontWeight: "700", fontSize: 14, color: theme.text, marginBottom: 8 }}>Full Name</Text>
+              <TextInput value={name} onChangeText={setName} style={{ backgroundColor: theme.inputBg, paddingHorizontal: 16, height: 50, borderRadius: 14, marginBottom: 16, color: theme.text, fontWeight: "600" }} />
+
+              <Text style={{ fontWeight: "700", fontSize: 14, color: theme.text, marginBottom: 8 }}>Email Address</Text>
+              <TextInput value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" style={{ backgroundColor: theme.inputBg, paddingHorizontal: 16, height: 50, borderRadius: 14, marginBottom: 16, color: theme.text, fontWeight: "600" }} />
+
+              <Text style={{ fontWeight: "700", fontSize: 14, color: theme.text, marginBottom: 8 }}>Phone Number</Text>
+              <TextInput value={phone} onChangeText={setPhone} keyboardType="phone-pad" style={{ backgroundColor: theme.inputBg, paddingHorizontal: 16, height: 50, borderRadius: 14, marginBottom: 16, color: theme.text, fontWeight: "600" }} />
+
+              <Text style={{ fontWeight: "700", fontSize: 14, color: theme.text, marginBottom: 8 }}>Password</Text>
+              <TextInput value={password} onChangeText={setPassword} secureTextEntry style={{ backgroundColor: theme.inputBg, paddingHorizontal: 16, height: 50, borderRadius: 14, marginBottom: 24, color: theme.text, fontWeight: "600" }} />
+
+              <TouchableOpacity activeOpacity={0.8} onPress={handleSaveSettings} style={{ backgroundColor: theme.brandPrimary, height: 54, borderRadius: 16, justifyContent: "center", alignItems: "center", marginBottom: 12 }}>
+                <Text style={{ color: "white", fontWeight: "700", fontSize: 16 }}>Save Changes</Text>
+              </TouchableOpacity>
+
+              {/* BUTTON LOGOUT BERFUNGSI MEMANGGIL HANDLER REDIRECT */}
+              <TouchableOpacity 
+                activeOpacity={0.7}
+                onPress={handleLogout}
+                style={{ flexDirection: "row", alignItems: "center", justifyContent: "center", backgroundColor: "#FEF2F2", height: 54, borderRadius: 16, marginBottom: 20 }}
+              >
+                <Ionicons name="log-out-outline" size={20} color="#EF4444" style={{ marginRight: 8 }} />
+                <Text style={{ color: "#EF4444", fontWeight: "700", fontSize: 16 }}>Log Out</Text>
+              </TouchableOpacity>
+            </ScrollView>
+
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
+
     </View>
   );
 }
