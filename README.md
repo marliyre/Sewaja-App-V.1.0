@@ -1,6 +1,6 @@
 # Sewaja App
 
-## Sewa Barang Jadi Lebih Mudah
+## "Sewa Mudah, Hidup Tanpa Masalah, dan Uang Tak Berdarah"
 
 Sewaja App adalah prototype aplikasi sewa barang berbasis mobile yang dirancang untuk membantu pengguna mencari, menyewa, dan menawarkan barang secara praktis.
 
